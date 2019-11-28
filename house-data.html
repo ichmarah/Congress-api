@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -12,18 +12,18 @@
     <!-- Own CSS -->
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
 
-    <title>Home – Transparent Government in Fact (TGIF)</title>
+    <title>House – Transparent Government in Fact (TGIF)</title>
 
 </head>
 
-<body class="h-100">
+<body>
 
     <div class="container">
         <header>
             <nav class="navbar navbar-light">
                 <a class="navbar-brand" href="index.html">
-                    <img src="resources/images/pure.png" width="80" height="80"
-                        alt="Logo Transparent Government in Fact (TGIF)">
+                    <img src="resources/images/pure.png" width="80" height="80" class="d-inline-block align-bottom"
+                        alt="Logo">
                     <p class="d-inline-block align-bottom h1">Transparent Government in Fact (TGIF)</p>
                 </a>
                 <a href="mailto:info@tgif.net" class="envelope">
@@ -49,7 +49,8 @@
                                 Congress 113
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="house-data.html">House</a>
+                                <a class="dropdown-item" href="house-data.html">House <span
+                                        class="sr-only">(current)</span></a>
                                 <a class="dropdown-item" href="senate-data.html">Senate</a>
                             </div>
                         </li>
@@ -81,60 +82,33 @@
         <main>
             <div class="row">
                 <div class="col-sm-8">
-                    <p class="h2">About us</p>
-                    <p>Openness, accountability, and honesty define government transparency. In a free society,
-                        transparency is government’s obligation to share information with citizens. It is at the heart
-                        of how citizens hold their public officials accountable. Here at TGIF we believe that government
-                        should be transparent.
+                    <p class="h2">House</p>
+                    <p>
+                        The United States House of Representatives, commonly referred to as the House, is one of the two
+                        chambers of the United States Congress; the other is the Senate.
                     </p>
-                    <p>Governments exist to serve the people. Information on how officials conduct the public
-                        business and spend taxpayer money must be readily available and easily understood. This
-                        transparency allows good and just governance. Transparency promotes accountability and
-                        provides information for citizens about what their Government is doing.
+                    <p>
+                        Members in the House are called representatives. Each state receives representation in the House
+                        in proportion to the size of its population but is entitled to at least one representative.
+                        There are currently 435 representatives, a number fixed by law since 1911. The most populous
+                        state, California, currently has 53 representatives. There are seven states with only one
+                        representative: Alaska, Delaware, Montana, North Dakota, South Dakota, Vermont, and Wyoming.[13]
                     </p>
-
-                    <div class="accordion" id="accordionExample">
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Read More
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
-                                data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p>We also believe that government should be participatory. Public engagement
-                                        enhances the
-                                        Government’s effectiveness and improves the quality of its decisions. Knowledge
-                                        is
-                                        widely
-                                        dispersed in society, and public officials benefit from having access to that
-                                        dispersed
-                                        knowledge. We invite you to use our site to become actively engaged in American
-                                        government.
-                                        TGIF works to disclose information in forms that the public can readily find and
-                                        use. We
-                                        solicit public feedback to identify information of greatest use to the public.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    <p>
+                        Each representative serves for a two-year term. There are no term limits.
+                    </p>
                 </div>
-                <div class="col-sm-4">
-                    <img src="resources/images/governance.png" width="300" height="250"
-                        alt="Image of a magnifier on a paper with graphs">
-                </div>
+                <div class="col-sm-4"></div>
             </div>
 
+            <table id="house-data" class="table table-borderless">
+            </table>
         </main>
 
+
+
     </div>
+
     <footer class="container py-3 bg-light">
         <div class="footer-text">
             <span class="text-muted">&#169;2016 TGIF | All Rights Reserved</span>
@@ -157,7 +131,8 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 
-<script src="resources/js/pro-Congress-113-senate.js"></script>
-<script src="/resources/js/main.js"></script>
+<script src="resources/js/pro-Congress-113-house.js"></script>
+<script src="resources/js/pro-Congress-113-house-script.js"></script>
+
 
 </html>
