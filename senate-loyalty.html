@@ -59,7 +59,7 @@
                                 Attendance
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">House</a>
+                                <a class="dropdown-item" href="house-attendance.html">House</a>
                                 <a class="dropdown-item" href="senate-attendance.html">Senate</a>
                             </div>
                         </li>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-6">
                     <p class="h2 align-right">Senate at Glance</p>
-                    <table id="senate-att-loy" class="table table-borderless">
+                    <table id="senate-loy-glance" class="table table-borderless">
                     </table>
                 </div>
             </div>
@@ -101,7 +101,16 @@
             </div>
 
             <div class="container d-flex">
-                <p>hoi</p>
+                <div class="col-6">
+                    <p class="h2 align-left">Least Loyal(Bottom 10&#37; of Party) </p>
+                    <table id="senate-loy-l" class="table table-borderless">
+                    </table>
+                </div>
+                <div class="col-6">
+                    <p class="h2 align-left">Most Loyal (Top 10&#37 of Party)</p>
+                    <table id="senate-loy-m" class="table table-borderless">
+                    </table>
+                </div>
             </div>
 
         </main>
@@ -134,7 +143,7 @@
 
 <script src="resources/js/pro-Congress-113-senate.js"></script>
 <script src="resources/js/statistics.js"></script>
-<script src="resources/js/senate-att-loy.js"></script>
+<script src="resources/js/senate-loyalty.js"></script>
 
 
 </html>

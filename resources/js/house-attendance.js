@@ -1,6 +1,6 @@
-let table = document.getElementById("senate-loy-glance");
-let tableL = document.getElementById("senate-loy-l");
-let tableM = document.getElementById("senate-loy-m");
+let table = document.getElementById("house-att-glance");
+let tableL = document.getElementById("house-att-l");
+let tableM = document.getElementById("house-att-m");
 let members = data.results[0].members;
 
 // Get number of members in each party
@@ -21,15 +21,14 @@ function getList() {
             indList++;
         }
     }
-    console.log("Sum demList: " + demList); // Sum demList 57
-    console.log("Sum repList: " + repList); // Sum demList 46
-    console.log("Sum indList: " + indList); // Sum demList 2
+    console.log("Sum demList: " + demList); // Sum demList 210 
+    console.log("Sum repList: " + repList); // Sum demList 240
+    console.log("Sum indList: " + indList); // Sum demList 0
 
     let totNum = demList + repList + indList; // To check if total amount is indeed 105
-    console.log("Total list: " + totNum); // 105
+    console.log("Total list: " + totNum); // 450
 }
 getList();
-
 
 
 
@@ -46,7 +45,7 @@ let totAvgVWP = 0;
 function getAvg() {
     for (let element of members) {
         let vwp = element.votes_with_party_pct; // to make it easier instead of using the long name
-        console.log("vwp: " + vwp);
+        // console.log("vwp: " + vwp);
         if (element.party === "D") {
             demAvgVWP += vwp; // Total of the percentages
         } else if (element.party === "R") {
@@ -73,10 +72,10 @@ function getAvg() {
 }
 getAvg();
 
-// demAvgVWP: 96.97052631578948 %
-// remAvgVWP: 88.8445652173913 %
-// indAvgVWP: 95.17500000000001 %
-
+// demAvgVWP: 89.69 %
+// remAvgVWP: 93.35 %
+// indAvgVWP: 0 %
+// totAvgVWO: 91.64  %
 
 
 // Create table Senate  at glance
@@ -114,12 +113,12 @@ function makeGlanceTable() {
         cell1.appendChild(cell1Text);
 
         let cell2 = row.insertCell();
-        let cell2Text = document.createTextNode(`${statistics[partyName].sen_att_num}`);
+        let cell2Text = document.createTextNode(`${statistics[partyName].house_att_num}`);
         console.log(cell2Text);
         cell2.appendChild(cell2Text);
 
         let cell3 = row.insertCell();
-        let cell3Text = document.createTextNode(`${statistics[partyName].sen_att_votes}` + "%");
+        let cell3Text = document.createTextNode(`${statistics[partyName].house_att_votes}` + "%");
         console.log(cell3Text);
         cell3.appendChild(cell3Text);
 
@@ -130,38 +129,36 @@ function makeGlanceTable() {
         table.appendChild(row);
     }
 }
-makeGlanceTable();
+makeGlanceTable()
 
 
 
-let llpList = []; //least loyal percentage. create an empty array to push the sorted values in the array
-let mlpList = [];
+let lvpList = []; //create an empty array to push the sorted values in the array
+let mvpList = [];
 
-function getLeast(x, y) {
+function getLeast(x, ) {
     for (let element of members) {
-        llpList.push(element.votes_with_party_pct);
-        mlpList.push(element.votes_with_party_pct);
+        lvpList.push(element.missed_votes_pct);
+        mvpList.push(element.missed_votes_pct);
 
 
-        llpList = llpList.sort((a, b) => {
-            return a - b;
-        });
-
-        mlpList = mlpList.sort((a, b) => {
+        lvpList = lvpList.sort((a, b) => {
             return b - a;
         });
+
+        mvpList = mvpList.sort((a, b) => {
+            return a - b;
+        });
     }
-    console.log("Sorted lvpList: " + llpList);
-    console.log("Sorted mvpList: " + mlpList);
+    console.log("Sorted lvpList: " + lvpList);
+    console.log("Sorted lvpList: " + mvpList);
 }
-getLeast(llpList, mlpList);
+getLeast(lvpList, mvpList);
 
-
-
-let llp10 = llpList.slice(0, (llpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
-console.log("llp10: " + llp10);
-let mlp10 = mlpList.slice(0, (mlpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
-console.log("mlp10: " + mlp10);
+let lvp10 = lvpList.slice(0, (lvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+console.log("lvp10: " + lvp10);
+let mvp10 = mvpList.slice(0, (mvpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+console.log("mvp10: " + mvp10);
 
 
 
@@ -180,20 +177,19 @@ function makeHeaderLM() {
 
     let cell02 = rowHeadL.insertCell();
     let cell022 = rowHeadM.insertCell();
-    let cell02Text = document.createTextNode("No. Party Votes");
-    let cell022Text = document.createTextNode("No. Party Votes");
+    let cell02Text = document.createTextNode("No. Missed Votes");
+    let cell022Text = document.createTextNode("No. Missed Votes");
     cell02.appendChild(cell02Text);
     cell022.appendChild(cell022Text);
 
     let cell03 = rowHeadL.insertCell();
     let cell033 = rowHeadM.insertCell();
-    let cell03Text = document.createTextNode("% Party Votes");
-    let cell033Text = document.createTextNode("% Party Votes");
+    let cell03Text = document.createTextNode("% Missed");
+    let cell033Text = document.createTextNode("% Missed");
     cell03.appendChild(cell03Text);
     cell033.appendChild(cell033Text);
 }
 makeHeaderLM();
-
 
 
 
@@ -210,8 +206,8 @@ function makeTableLeast() {
         };
         fullname(fullName);
 
-        for (let i = 0; i <= llp10.length; i++) {
-            if (element.votes_with_party_pct === llp10[i]) {
+        for (let i = 0; i <= lvp10.length; i++) {
+            if (element.missed_votes_pct === lvp10[i]) {
                 let rowL = tableL.insertRow()
                 let url = members.url;
 
@@ -224,11 +220,11 @@ function makeTableLeast() {
                 cell1L.appendChild(a);
 
                 let cell2L = rowL.insertCell();
-                let cell2LText = document.createTextNode(element.total_votes)
+                let cell2LText = document.createTextNode(element.missed_votes)
                 cell2L.appendChild(cell2LText);
 
                 let cell3L = rowL.insertCell();
-                let cell3LText = document.createTextNode(element.votes_with_party_pct)
+                let cell3LText = document.createTextNode(element.missed_votes_pct)
                 cell3L.appendChild(cell3LText);
 
                 rowL.appendChild(cell1L);
@@ -263,8 +259,8 @@ function makeTableMost() {
         };
         fullname(fullName);
 
-        for (let i = 0; i <= mlp10.length; i++) {
-            if (element.votes_with_party_pct === mlp10[i]) {
+        for (let i = 0; i <= mvp10.length; i++) {
+            if (element.missed_votes_pct === mvp10[i]) {
                 let rowM = tableM.insertRow()
                 let url = members.url;
 
@@ -277,11 +273,11 @@ function makeTableMost() {
                 cell1M.appendChild(a);
 
                 let cell2M = rowM.insertCell();
-                let cell2MText = document.createTextNode(element.total_votes)
+                let cell2MText = document.createTextNode(element.missed_votes)
                 cell2M.appendChild(cell2MText);
 
                 let cell3M = rowM.insertCell();
-                let cell3MText = document.createTextNode(element.votes_with_party_pct)
+                let cell3MText = document.createTextNode(element.missed_votes_pct)
                 cell3M.appendChild(cell3MText);
 
                 rowM.appendChild(cell1M);
@@ -291,12 +287,11 @@ function makeTableMost() {
 
                 tableM.appendChild(rowM);
 
+                continue;
             }
 
-
-        };
-
+        }
 
     }
 }
-makeTableMost()
+makeTableMost();

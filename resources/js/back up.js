@@ -1,6 +1,6 @@
-let table = document.getElementById("senate-loy-glance");
-let tableL = document.getElementById("senate-loy-l");
-let tableM = document.getElementById("senate-loy-m");
+let table = document.getElementById("senate-att-glance");
+let tableL = document.getElementById("senate-att-l");
+let tableM = document.getElementById("senate-att-m");
 let members = data.results[0].members;
 
 // Get number of members in each party
@@ -32,7 +32,6 @@ getList();
 
 
 
-
 /* 
 Calculate the average "votes with party" for each party in percentage
 For each party, add the value of the new element to the values of previous element.
@@ -41,7 +40,6 @@ Therefore, start with 0 as a basis.
 let demAvgVWP = 0;
 let repAvgVWP = 0;
 let indAvgVWP = 0;
-let totAvgVWP = 0;
 
 function getAvg() {
     for (let element of members) {
@@ -54,28 +52,23 @@ function getAvg() {
         } else {
             indAvgVWP += vwp;
         }
-        totAvgVWP += vwp;
     }
     console.log("Sum demAvgVWP: " + demAvgVWP);
-    console.log("Sum totAvgVWP: " + totAvgVWP);
 
-    demAvgVWP /= demList; // New total of dem percentages is dividing demAvgVWP by the total amount of Ds
+    demAvgVWP /= demList // New total of dem percentages is dividing demAvgVWP by the total amount of Ds
     console.log("demAvgVWP: " + demAvgVWP + " %"); // Check up: previous code works
 
-    repAvgVWP /= repList;
+    repAvgVWP /= repList
     console.log("remAvgVWP: " + repAvgVWP + " %");
 
-    indAvgVWP /= indList;
+    indAvgVWP /= indList
     console.log("indAvgVWP: " + indAvgVWP + " %");
-
-    totAvgVWP /= members.length
-    console.log("totAvgVWP: " + totAvgVWP + "%");
 }
 getAvg();
-
 // demAvgVWP: 96.97052631578948 %
 // remAvgVWP: 88.8445652173913 %
 // indAvgVWP: 95.17500000000001 %
+
 
 
 
@@ -114,12 +107,12 @@ function makeGlanceTable() {
         cell1.appendChild(cell1Text);
 
         let cell2 = row.insertCell();
-        let cell2Text = document.createTextNode(`${statistics[partyName].sen_att_num}`);
+        let cell2Text = document.createTextNode(`${statistics[partyName].num}`);
         console.log(cell2Text);
         cell2.appendChild(cell2Text);
 
         let cell3 = row.insertCell();
-        let cell3Text = document.createTextNode(`${statistics[partyName].sen_att_votes}` + "%");
+        let cell3Text = document.createTextNode(`${statistics[partyName].votes}` + "%");
         console.log(cell3Text);
         cell3.appendChild(cell3Text);
 
@@ -130,40 +123,28 @@ function makeGlanceTable() {
         table.appendChild(row);
     }
 }
-makeGlanceTable();
+makeGlanceTable()
+
+
+/*
+Display top 10% least engaged in the table, sort, and handle duplicate data points (from members)
+1. Function to Sort members.missed_votes_pct --> sorted should be descending order 
+2. use compare function to sort numbers correctly (function within function)
+3. members.length * 0.1 = 105 * 0.1 = 10.5 
+4. let leastPct = slice from the sort position 0 to 10 (why also 11 to check if the last two are the same???)
+    (ED: is not a correct way)
+    Should be: array * 0.10
+5. for of loop through leastPct (if members.missed_votes_pct == leastPct, create let cell1,
+    create anchor tag, create cell1Text = document.createTExtNode(members.name),
+    append text to anchor, use target:_blank, append anchor to cell)
+*/
 
 
 
-let llpList = []; //least loyal percentage. create an empty array to push the sorted values in the array
-let mlpList = [];
-
-function getLeast(x, y) {
-    for (let element of members) {
-        llpList.push(element.votes_with_party_pct);
-        mlpList.push(element.votes_with_party_pct);
 
 
-        llpList = llpList.sort((a, b) => {
-            return a - b;
-        });
-
-        mlpList = mlpList.sort((a, b) => {
-            return b - a;
-        });
-    }
-    console.log("Sorted lvpList: " + llpList);
-    console.log("Sorted mvpList: " + mlpList);
-}
-getLeast(llpList, mlpList);
-
-
-
-let llp10 = llpList.slice(0, (llpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
-console.log("llp10: " + llp10);
-let mlp10 = mlpList.slice(0, (mlpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
-console.log("mlp10: " + mlp10);
-
-
+let lvpList = []; //create an empty array to push the sorted values in the array
+let mvpList = [];
 
 function makeHeaderLM() {
     let tHeadL = tableL.createTHead();
@@ -180,15 +161,15 @@ function makeHeaderLM() {
 
     let cell02 = rowHeadL.insertCell();
     let cell022 = rowHeadM.insertCell();
-    let cell02Text = document.createTextNode("No. Party Votes");
-    let cell022Text = document.createTextNode("No. Party Votes");
+    let cell02Text = document.createTextNode("No. Missed Votes");
+    let cell022Text = document.createTextNode("No. Missed Votes");
     cell02.appendChild(cell02Text);
     cell022.appendChild(cell022Text);
 
     let cell03 = rowHeadL.insertCell();
     let cell033 = rowHeadM.insertCell();
-    let cell03Text = document.createTextNode("% Party Votes");
-    let cell033Text = document.createTextNode("% Party Votes");
+    let cell03Text = document.createTextNode("% Missed");
+    let cell033Text = document.createTextNode("% Missed");
     cell03.appendChild(cell03Text);
     cell033.appendChild(cell033Text);
 }
@@ -196,8 +177,47 @@ makeHeaderLM();
 
 
 
+function makeTable() {
+    for (let element of members) {
+        let lmvp = element.missed_votes_pct;
 
-function makeTableLeast() {
+        lvpList.push(lmvp);
+        mvpList.push(lmvp);
+        // console.log("lvpList: " + lvpList); // Check up: previous code works as wanted.
+        // console.log("mvpList: " + mvpList);
+
+        lvpList = lvpList.sort((a, b) => {
+            return b - a;
+        });
+        // console.log("Sorted lvpList: " + lvpList); // Check up: previous code works
+
+        mvpList = mvpList.sort((a, b) => {
+            return a - b;
+        });
+
+    }
+    console.log("Sorted mvpList: " + mvpList);
+
+    let lvp10 = lvpList.slice(0, (lvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+    console.log("lvp10: " + lvp10);
+    let mvp10 = mvpList.slice(0, (mvpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+    console.log("mvp10: " + mvp10);
+    // mvp10: 0,0,0,0,0.15,0.15,0.29,0.3,0.3,0.3  
+
+    let newMvp10 = (mvp10) => {
+        for (let i = 0; i < mvp10.length; i++) {
+            for (let j = 0; j < mvp10.length; j++) {
+                if (i !== j && mvp10[i] === mvp10[j]) {
+                    newArray = mvp10[j];
+                }
+
+            }
+
+        }
+        console.log("mvp10: " + newMvp10);
+    };
+
+
     for (let element of members) {
         let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
         // Create a variable that includes the three values of a name
@@ -210,8 +230,8 @@ function makeTableLeast() {
         };
         fullname(fullName);
 
-        for (let i = 0; i <= llp10.length; i++) {
-            if (element.votes_with_party_pct === llp10[i]) {
+        for (let i = 0; i <= lvp10.length; i++) {
+            if (element.missed_votes_pct === lvp10[i]) {
                 let rowL = tableL.insertRow()
                 let url = members.url;
 
@@ -224,11 +244,11 @@ function makeTableLeast() {
                 cell1L.appendChild(a);
 
                 let cell2L = rowL.insertCell();
-                let cell2LText = document.createTextNode(element.total_votes)
+                let cell2LText = document.createTextNode(element.missed_votes)
                 cell2L.appendChild(cell2LText);
 
                 let cell3L = rowL.insertCell();
-                let cell3LText = document.createTextNode(element.votes_with_party_pct)
+                let cell3LText = document.createTextNode(element.missed_votes_pct)
                 cell3L.appendChild(cell3LText);
 
                 rowL.appendChild(cell1L);
@@ -237,34 +257,12 @@ function makeTableLeast() {
 
 
                 tableL.appendChild(rowL);
-
             }
-
 
         };
 
-
-    }
-}
-makeTableLeast()
-
-
-
-function makeTableMost() {
-    for (let element of members) {
-        let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
-        // Create a variable that includes the three values of a name
-        function fullname() {
-            if (element.middle_name === null) {
-                return fullName = element.first_name + " " + element.last_name;
-            } else {
-                return fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
-            }
-        };
-        fullname(fullName);
-
-        for (let i = 0; i <= mlp10.length; i++) {
-            if (element.votes_with_party_pct === mlp10[i]) {
+        for (let i = 0; i <= mvp10.length; i++) {
+            if (element.missed_votes_pct === mvp10[i]) {
                 let rowM = tableM.insertRow()
                 let url = members.url;
 
@@ -277,11 +275,11 @@ function makeTableMost() {
                 cell1M.appendChild(a);
 
                 let cell2M = rowM.insertCell();
-                let cell2MText = document.createTextNode(element.total_votes)
+                let cell2MText = document.createTextNode(element.missed_votes)
                 cell2M.appendChild(cell2MText);
 
                 let cell3M = rowM.insertCell();
-                let cell3MText = document.createTextNode(element.votes_with_party_pct)
+                let cell3MText = document.createTextNode(element.missed_votes_pct)
                 cell3M.appendChild(cell3MText);
 
                 rowM.appendChild(cell1M);
@@ -290,13 +288,11 @@ function makeTableMost() {
 
 
                 tableM.appendChild(rowM);
-
             }
 
-
-        };
-
+        }
 
     }
+
 }
-makeTableMost()
+makeTable();

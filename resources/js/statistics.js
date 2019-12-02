@@ -2,20 +2,29 @@
 let statistics = {
 
     "Democrats": {
-        num: 57,
-        votes: 96.97
+        sen_att_num: 57,
+        sen_att_votes: 96.97,
+        house_att_num: 210,
+        house_att_votes: 89.69
+         
     },
     "Republicans": {
-        num: 46,
-        votes: 88.84
+        sen_att_num: 46,
+        sen_att_votes: 88.84,
+        house_att_num: 240,
+        house_att_votes: 93.35
     },
     "Independents": {
-        num: 2,
-        votes: 95.18
+        sen_att_num: 2,
+        sen_att_votes: 95.18,
+        house_att_num: 0,
+        house_att_votes: 0
     },
     "Total": {
-        num: 105,
-        votes: "-"
+        sen_att_num: 105,
+        sen_att_votes: 93.38,
+        house_att_num: 450,
+        house_att_votes: 91.64
     }
 
 };
