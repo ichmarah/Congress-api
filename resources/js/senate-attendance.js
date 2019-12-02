@@ -168,7 +168,7 @@ function getLeast(x, ) {
         });
     }
     console.log("Sorted lvpList: " + lvpList);
-    console.log("Sorted lvpList: " + mvpList);
+    console.log("Sorted mvpList: " + mvpList);
 }
 getLeast(lvpList, mvpList);
 
@@ -176,7 +176,7 @@ getLeast(lvpList, mvpList);
 
 let lvp10 = lvpList.slice(0, (lvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("lvp10: " + lvp10);
-let mvp10 = mvpList.slice(0, (mvpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+let mvp10 = mvpList.slice(0, (mvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("mvp10: " + mvp10);
 
 
@@ -227,7 +227,9 @@ function makeTableLeast() {
         fullname(fullName);
 
         for (let i = 0; i <= lvp10.length; i++) {
-            if (element.missed_votes_pct === lvp10[i]) {
+            if (lvp10[i] === lvp10[i - 1]) {
+                continue;
+            } else if (element.missed_votes_pct === lvp10[i]) {
                 let rowL = tableL.insertRow()
                 let url = members.url;
 
@@ -253,7 +255,8 @@ function makeTableLeast() {
 
 
                 tableL.appendChild(rowL);
-
+            } else {
+                continue;
             }
 
 
@@ -280,7 +283,9 @@ function makeTableMost() {
         fullname(fullName);
 
         for (let i = 0; i <= mvp10.length; i++) {
-            if (element.missed_votes_pct === mvp10[i]) {
+            if (mvp10[i] === mvp10[i - 1]) {
+                continue;
+            } else if (element.missed_votes_pct === mvp10[i]) {
                 let rowM = tableM.insertRow()
                 let url = members.url;
 
@@ -307,6 +312,8 @@ function makeTableMost() {
 
                 tableM.appendChild(rowM);
 
+
+            } else {
                 continue;
             }
 

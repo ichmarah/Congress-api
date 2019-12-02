@@ -158,9 +158,9 @@ getLeast(llpList, mlpList);
 
 
 
-let llp10 = llpList.slice(0, (llpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+let llp10 = llpList.slice(0, (llpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("llp10: " + llp10);
-let mlp10 = mlpList.slice(0, (mlpList.length * 0.11)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+let mlp10 = mlpList.slice(0, (mlpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("mlp10: " + mlp10);
 
 
@@ -211,7 +211,9 @@ function makeTableLeast() {
         fullname(fullName);
 
         for (let i = 0; i <= llp10.length; i++) {
-            if (element.votes_with_party_pct === llp10[i]) {
+            if (llp10[i] === llp10[i-1]) {
+                continue;
+            } else if (element.votes_with_party_pct === llp10[i]) {
                 let rowL = tableL.insertRow()
                 let url = members.url;
 
@@ -264,7 +266,9 @@ function makeTableMost() {
         fullname(fullName);
 
         for (let i = 0; i <= mlp10.length; i++) {
-            if (element.votes_with_party_pct === mlp10[i]) {
+            if (mlp10[i] === mlp10[i-1]) {
+                continue;
+            } else if (element.votes_with_party_pct === mlp10[i]) {
                 let rowM = tableM.insertRow()
                 let url = members.url;
 

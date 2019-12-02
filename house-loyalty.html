@@ -12,7 +12,7 @@
     <!-- Own CSS -->
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
 
-    <title>Attendance – Transparent Government in Fact (TGIF)</title>
+    <title>Loyalty – Transparent Government in Fact (TGIF)</title>
 
 </head>
 
@@ -60,8 +60,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="house-attendance.html">House</a>
-                                <a class="dropdown-item" href="senate-attendance.html">Senate <span
-                                        class="sr-only">(current)</span></a>
+                                <a class="dropdown-item" href="senate-attendance.html">Senate</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -70,7 +69,8 @@
                                 Party Loyalty
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="house-loyalty.html">House</a>
+                                <a class="dropdown-item" href="house-loyalty.html">House <span
+                                    class="sr-only">(current)</span></a>
                                 <a class="dropdown-item" href="senate-loyalty.html">Senate</a>
                             </div>
                         </li>
@@ -82,29 +82,16 @@
         <main>
             <div class="row">
                 <div class="col-6">
-                    <p class="h2">Attendance</p>
+                    <p class="h2">Loyalty</p>
                     <p>
-                        The Constitution specifies that a majority of members constitutes a quorum to do business in
-                        each house. The rules of each house provide that a quorum is assumed to be present unless a
-                        quorum call demonstrates the contrary. Representatives and senators rarely force the presence of
-                        a quorum by demanding quorum calls; thus, in most cases, debates continue even if a majority is
-                        not present.
+                        Those who consider themselves to be strong partisans, strong Democrats and strong Republicans
+                        respectively, tend to be the most faithful in voting for their party's nominee for office and
+                        legislation that backs their party's agenda.
                     </p>
-                    <p>Both houses use voice voting to decide most matters; members shout out "aye" or "no," and the
-                        presiding officer announces the result. The Constitution, however, requires a recorded vote on
-                        the demand of one-fifth of the members present. If the result of the voice vote is unclear, or
-                        if the matter is controversial, a recorded vote usually ensues. The Senate uses roll-call votes;
-                        a clerk calls out the names of all the senators, each senator stating "aye" or "no" when his or
-                        her name is announced. The House reserves roll-call votes for the most formal matters, as a
-                        roll-call of all 435 representatives takes quite some time; normally, members vote by electronic
-                        device. In the case of a tie, the motion in question fails. In the Senate, the Vice President
-                        may (if present) cast the tiebreaking vote.
-                    </p>
-
                 </div>
                 <div class="col-6">
-                    <p class="h2 align-right">Senate at Glance</p>
-                    <table id="senate-att-glance" class="table table-borderless">
+                    <p class="h2 align-right">House at Glance</p>
+                    <table id="house-loy-glance" class="table table-borderless">
                     </table>
                 </div>
             </div>
@@ -115,18 +102,16 @@
 
             <div class="container d-flex">
                 <div class="col-6">
-                    <p class="h2 align-left">Least Engaged (Bottom 10&#37; Attendance) </p>
-                    <table id="senate-att-l" class="table table-borderless">
+                    <p class="h2 align-left">Least Loyal(Bottom 10&#37; of Party) </p>
+                    <table id="house-loy-l" class="table table-borderless">
                     </table>
                 </div>
                 <div class="col-6">
-                    <p class="h2 align-left">Most Engaged (Top 10&#37 Attendance)</p>
-                    <table id="senate-att-m" class="table table-borderless">
+                    <p class="h2 align-left">Most Loyal (Top 10&#37 of Party)</p>
+                    <table id="house-loy-m" class="table table-borderless">
                     </table>
                 </div>
             </div>
-
-
 
         </main>
 
@@ -156,9 +141,9 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 
-<script src="resources/js/pro-Congress-113-senate.js"></script>
+<script src="resources/js/pro-Congress-113-house.js"></script>
 <script src="resources/js/statistics.js"></script>
-<script src="resources/js/senate-attendance.js"></script>
+<script src="resources/js/house-loyalty.js"></script>
 
 
 </html>
