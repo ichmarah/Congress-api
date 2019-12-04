@@ -1,3 +1,7 @@
+#alert {
+    display: none;
+}
+
 .card {
     border: none;
 }

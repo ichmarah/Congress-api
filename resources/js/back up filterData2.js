@@ -1,34 +1,31 @@
 let table = document.getElementById("senate-data");
 let members = data.results[0].members;
-let independent = document.querySelector("input[value=independent]");
-let democrat = document.querySelector("input[value=democrat]");
-let republican = document.querySelector("input[value=republican]");
+let independent = document.getElementById("independent");
+let democrat = document.getElementById("democrat");
+let republican = document.getElementById("republican");
 let checkBoxes = [democrat, republican, independent];
-let filteredMembers = []; //to be used as argument to create table (makeTable())
+let filteredMembers = [];
 
-//Create event for every value of inputs
-for (let i = 0; i < checkBoxes.length; i++) {
-    checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
-};
+checkBoxes[0].addEventListener("change", function () {
+    makeTable(filterData());
+});
 
-// For every member, check conditions to be true, if true, push. What happens if not true? Not pushed?
-//Nothing is happening 
+
 function filterData() {
-    for (let i = 0; i < members.length; i++) { 
-        if (checkBoxes[0].addEventListener === true && members[i].party === "D") {
+    for (let i = 0; i < members.length; i++) {
+        if (checkBoxes[0].checked === true && members[i].party === "D") {
             filteredMembers.push(members[i]);
-        } else if (checkBoxes[1].checked === true && members[i].party === "R") {
-            filteredMembers.push(members[i]);
-        } else if (checkBoxes[2].checked === true && members[i].party === "I") {
-            filteredMembers.push(members[i]);
-        } 
+        }
+        // } else if (checkBoxes[1].checked === true && members[i].party === "R") {
+        //     filteredMembers.push(members[i]);
+        // } else if (checkBoxes[2].checked === true && members[i].party === "I") {
+        //     filteredMembers.push(members[i]);
+        // };
     }
     return filteredMembers;
     // console.log(filteredMembers);
 }
-filterData(members); //When removing this, table is not visible
-
-
+filterData();
 
 
 // Create table Senate
@@ -75,7 +72,7 @@ function makeTable(x) {
         };
         fullname(fullName);
 
-        
+       
 
         let cell1 = row.insertCell();
         let a = document.createElement("a");
