@@ -59,8 +59,8 @@
                                 Attendance
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="house-data.html">House  <span
-                                    class="sr-only">(current)</span></a>
+                                <a class="dropdown-item" href="house-data.html">House <span
+                                        class="sr-only">(current)</span></a>
                                 <a class="dropdown-item" href="senate-attendance.html">Senate</a>
                             </div>
                         </li>
@@ -101,8 +101,18 @@
                 <div class="col-sm-4"></div>
             </div>
 
+            <div class="ckeckboxes">
+                <p>Party Affiliation</p>
+                <input id="democrat" class="check-filter" type="checkbox" name="party affiliation" value="democrat"
+                    checked="checked"> <label for="democrat">Democrat</label>
+                <input id="republican" type="checkbox" name="party affiliation" value="republican" checked="checked">
+                <label for="republican">Republican</label>
+                <input id="independent" type="checkbox" name="party affiliation" value="independent" checked="checked">
+                <label for="independent">Independent</label>
+            </div>
             <table id="house-data" class="table table-borderless">
             </table>
+            <p id="alert">Please select a checkbox!</p>
         </main>
 
 

@@ -14,26 +14,30 @@ for (let i = 0; i < checkBoxes.length; i++) {
 // For every member, check conditions to be true, if true, push. What happens if not true? Not pushed?
 //Nothing is happening 
 function filterData() {
-    for (let i = 0; i < members.length; i++) { 
-        if (checkBoxes[0].addEventListener === true && members[i].party === "D") {
+    // console.log("filter data function runs")
+    filteredMembers.length = 0;
+    document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
+    for (let i = 0; i < members.length; i++) {
+        if (checkBoxes[0].checked === true && members[i].party === "D") {
             filteredMembers.push(members[i]);
         } else if (checkBoxes[1].checked === true && members[i].party === "R") {
             filteredMembers.push(members[i]);
         } else if (checkBoxes[2].checked === true && members[i].party === "I") {
             filteredMembers.push(members[i]);
-        } 
+        } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
+            document.getElementById("alert").style.display = "block" // if all boxes are unchecked, display alert
+            document.getElementById("alert").style.color = "red"
+        }
     }
-    return filteredMembers;
-    // console.log(filteredMembers);
+    makeTable(filteredMembers); // Create the table every time the function is being called. Function is called when there is a change in eventListener
 }
-filterData(members); //When removing this, table is not visible
-
+filterData(); //When removing this, table is not visible
 
 
 
 // Create table Senate
 function makeTable(x) {
- 
+    document.getElementById("senate-data").innerHTML = "";
 
     // Create table header
     let tHead = table.createTHead();
@@ -75,8 +79,6 @@ function makeTable(x) {
         };
         fullname(fullName);
 
-        
-
         let cell1 = row.insertCell();
         let a = document.createElement("a");
         let cellText1 = document.createTextNode(fullname());
@@ -108,8 +110,6 @@ function makeTable(x) {
         row.appendChild(cell5);
 
         table.appendChild(row);
-
-
     }
 }
 makeTable(filteredMembers);
@@ -128,6 +128,9 @@ makeTable(filteredMembers);
 
 // republican.addEventListener("click", function () {
 //     filterData()
+
+
+
 // });
 
 // independent.addEventListener("click", function () {
