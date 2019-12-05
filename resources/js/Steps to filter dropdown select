@@ -1,0 +1,18 @@
+- Get value of states members[i].state
+- select the state option in dropdownbox
+- Each option has a value
+- Change table content based on states selected
+
+
+- a function that creates the option elements in this dropdown box
+let getDropdown = document.getElementbyId("dropdown")
+for[i] loop
+let options = document.getCreateElement("option[value=`${members[i].state}`")
+
+
+-Event: dropdown.addEventListener("select", stateFilter);
+
+- function stateFilter(), use for[i] loop for members.length
+conditional: if options.value === members[i].state) {
+    filteredMembers.push(members[i].state)
+}

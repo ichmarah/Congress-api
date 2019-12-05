@@ -4,11 +4,73 @@ let independent = document.querySelector("input[value=independent]");
 let democrat = document.querySelector("input[value=democrat]");
 let republican = document.querySelector("input[value=republican]");
 let checkBoxes = [democrat, republican, independent];
+// console.log(checkBoxes)
+let optionList = [];
 let filteredMembers = []; //to be used as argument to create table (makeTable())
+let filteredStates = [];
+
+function createOption() {
+    // Create the option for All
+    let dropdown = document.querySelector(".select-state")
+    let option = document.createElement("option");
+    let optionText1 = document.createTextNode("All");
+
+    option.value = "all"
+    option.appendChild(optionText1);
+    dropdown.appendChild(option);
+
+    optionList.push(dropdown.appendChild(option));
+
+    // Create options for every state
+    for (let i = 0; i < members.length; i++) {
+        //Create dropdown values
+        dropdown = document.querySelector(".select-state")
+        option = document.createElement("option");
+        let optionText = document.createTextNode(members[i].state);
+
+        option.value = members[i].state;
+        // console.log(option.value)
+        option.appendChild(optionText);
+        dropdown.appendChild(option);
+
+        optionList.push(dropdown.appendChild(option));
+    }
+
+}
+createOption();
+console.log(optionList)
+
+for (let i = 0; i < optionList.length; i++) {
+    optionList[i].addEventListener("select", filterState);
+};
+
+
+function filterState() {
+
+    filteredStates.length = 0;
+    document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
+    // Conditionals to filter states
+    for (let i = 0; i < members.length; i++) {
+
+        if (optionList[i].value === members[i].state || optionList[i].value === "all") {
+            filteredStates.push(members[i]);
+        };
+        // filteredStates = filteredStates.sort((a, b) => {
+        //     return a.filteredStates - b.filteredStates;
+        // });
+        // console.log(filteredStates);
+    }
+    
+
+    makeTable(filteredStates);
+}
+filterState()
+
+
 
 //Create event for every value of inputs
 for (let i = 0; i < checkBoxes.length; i++) {
-    checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+    checkBoxes[i].addEventListener("click", filterData); // When checkBoxes[i] is changed, apply filterData()
 };
 
 // For every member, check conditions to be true, if true, push. What happens if not true? Not pushed?
