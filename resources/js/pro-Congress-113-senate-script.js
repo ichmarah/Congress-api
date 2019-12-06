@@ -1,5 +1,5 @@
 // Global variables
-let table = document.getElementById("senate-data");
+let table = document.getElementById("table-data");
 let members = data.results[0].members;
 let independent = document.querySelector("input[value=independent]");
 let democrat = document.querySelector("input[value=democrat]");
@@ -89,7 +89,7 @@ filterData(); //When removing this, table is not visible
 
 // Create table Senate
 function makeTable(x, y) {
-    document.getElementById("senate-data").innerHTML = "";
+    document.getElementById("table-data").innerHTML = "";
 
     // Create table header
     let tHead = table.createTHead();
