@@ -7,13 +7,13 @@ let republican = document.querySelector("input[value=republican]");
 let checkBoxes = [democrat, republican, independent];
 // console.log(checkBoxes)
 
-let filteredMembers = []; //to be used as argument to create table in the filter filterDate() function
 var filteredStates = []; // to filter states and sorted alphabetically
 let optionList = ["All"]; // sorted states without duplicates
 
 let dropdown = document.querySelector(".select-state")
-let newOptionList = []
 let newFilteredStates = [];
+
+let filteredMembers = []; //to be used as argument to create table in the filter filterDate() function 
 
 
 
@@ -34,7 +34,7 @@ function createOption() {
     // First, filter throught states to remove duplicates
     for (let i = 0; i < filteredStates.length; i++) {
         for (let j = 0; j < filteredStates.length; j++) {
-            if (filteredStates[i] === filteredStates[j] && !optionList.includes(filteredStates[i])) { 
+            if (filteredStates[i] === filteredStates[j] && !optionList.includes(filteredStates[i])) {
                 optionList.push(filteredStates[j])
             }
         }
@@ -47,46 +47,15 @@ function createOption() {
         option.value = optionList[i];
         dropdown.appendChild(option);
         console.log(option);
-        newOptionList.push(option);
+        
     }
 }
 createOption();
-console.log(newOptionList)
 
 
 
-// Add event listener to the sorted option list
-// for (let i = 0; i < newOptionList.length; i++) {
-//     newOptionList[i].addEventListener("change", filterState);
-// };
-dropdown.addEventListener("change", filterState)
-
-
-function filterState() {
-
-    // newFilteredStates.length = 0;
-    // document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
-    // Conditionals to filter states
-    for (let i = 0; i < members.length; i++) {
-
-        if (dropdown.value === members[i].state) {
-            newFilteredStates.push(members[i]);
-        } else if (dropdown.value === "all") {
-            newFilteredStates = members[i].state;
-        }
-        // filteredStates = filteredStates.sort((a, b) => {
-        //     return a.filteredStates - b.filteredStates;
-        // });
-        // console.log(filteredStates);
-    }
-
-
-    makeTable(newFilteredStates);
-}
-filterState()
-
-
-
+// Create event listener for dropdown
+dropdown.addEventListener("change", filterData);
 //Create event for every value of inputs
 for (let i = 0; i < checkBoxes.length; i++) {
     checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
@@ -94,20 +63,23 @@ for (let i = 0; i < checkBoxes.length; i++) {
 
 
 function filterData() {
-    // console.log("filter data function runs")
     filteredMembers.length = 0;
+    
     document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
     for (let i = 0; i < members.length; i++) {
-        if (checkBoxes[0].checked === true && members[i].party === "D") {
-            filteredMembers.push(members[i]);
-        } else if (checkBoxes[1].checked === true && members[i].party === "R") {
-            filteredMembers.push(members[i]);
-        } else if (checkBoxes[2].checked === true && members[i].party === "I") {
-            filteredMembers.push(members[i]);
-        } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
-            document.getElementById("alert").style.display = "block" // if all boxes are unchecked, display alert
-            document.getElementById("alert").style.color = "red"
+        if (dropdown.value === members[i].state || dropdown.value === "All") {
+            if (checkBoxes[0].checked === true && members[i].party === "D") {
+                filteredMembers.push(members[i]);
+            } else if (checkBoxes[1].checked === true && members[i].party === "R") {
+                filteredMembers.push(members[i]);
+            } else if (checkBoxes[2].checked === true && members[i].party === "I") {
+                filteredMembers.push(members[i]);
+            } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
+                document.getElementById("alert").style.display = "block" // if all boxes are unchecked, display alert
+                document.getElementById("alert").style.color = "red"
+            }
         }
+
     }
     makeTable(filteredMembers); // Create the table every time the function is being called. Function is called when there is a change in eventListener
 }
@@ -116,7 +88,7 @@ filterData(); //When removing this, table is not visible
 
 
 // Create table Senate
-function makeTable(x, y, z) {
+function makeTable(x, y) {
     document.getElementById("senate-data").innerHTML = "";
 
     // Create table header
@@ -192,5 +164,4 @@ function makeTable(x, y, z) {
         table.appendChild(row);
     }
 }
-makeTable(members, newFilteredStates, filteredMembers);
-
+makeTable(members, filteredMembers);

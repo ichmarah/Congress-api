@@ -16,3 +16,14 @@ let options = document.getCreateElement("option[value=`${members[i].state}`")
 conditional: if options.value === members[i].state) {
     filteredMembers.push(members[i].state)
 }
+
+==========================================
+
+- When page boots/refreshes, show complete table --> parameter of members in makeTable() function
+- When selecting a state, show only those states (this includes states with members[i].party is "R" and/or "D")
+- When also checking off democrats, only show the selected states from "R" and "I"
+
+or
+- When page boots/refreshes, show complete table --> parameter of members in makeTable() function
+- When democrat is unchecked, show members[i].party with "R" and  "I", and all states connected to those parties
+- When also selecting a state, show members[i].party with "R" and  "I", and only with the selected states

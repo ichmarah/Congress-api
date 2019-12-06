@@ -1,15 +1,123 @@
+// Global variables
 let table = document.getElementById("senate-data");
 let members = data.results[0].members;
-console.log(members);
-// Get reference to the table
-// Declare members for easy use
-//[0] because results and members have only one element index
+let independent = document.querySelector("input[value=independent]");
+let democrat = document.querySelector("input[value=democrat]");
+let republican = document.querySelector("input[value=republican]");
+let checkBoxes = [democrat, republican, independent];
+// console.log(checkBoxes)
 
+let filteredMembers = []; //to be used as argument to create table in the filter filterDate() function
+var filteredStates = []; // to filter states and sorted alphabetically
+let optionList = ["All"]; // sorted states without duplicates
+
+let dropdown = document.querySelector(".select-state")
+let newOptionList = []
+let newFilteredStates = [];
+
+
+
+// Grab all states and sort them alphabetically
+function filterStates() {
+    for (i = 0; i < members.length; i++) {
+        filteredStates.push(members[i].state);
+    }
+    console.log(filteredStates);
+    filteredStates = filteredStates.sort()
+}
+filterStates();
+console.log(filteredStates) // total of 105 options but there are less amount of states in US. Need to prevent duplicates
+
+
+// Create options element for the select dropdown
+function createOption() {
+    // First, filter throught states to remove duplicates
+    for (let i = 0; i < filteredStates.length; i++) {
+        for (let j = 0; j < filteredStates.length; j++) {
+            if (filteredStates[i] === filteredStates[j] && !optionList.includes(filteredStates[i])) { 
+                optionList.push(filteredStates[j])
+            }
+        }
+    }
+    console.log(optionList)
+    // Actual creation of options for select element
+    for (let i = 0; i < optionList.length; i++) {
+        let option = document.createElement("option");
+        option.text = optionList[i];
+        option.value = optionList[i];
+        dropdown.appendChild(option);
+        console.log(option);
+        newOptionList.push(option);
+    }
+}
+createOption();
+console.log(newOptionList)
+
+
+
+// Add event listener to the sorted option list
+// for (let i = 0; i < newOptionList.length; i++) {
+//     newOptionList[i].addEventListener("change", filterState);
+// };
+dropdown.addEventListener("change", filterState)
+
+
+function filterState() {
+
+    // newFilteredStates.length = 0;
+    // document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
+    // Conditionals to filter states
+    for (let i = 0; i < members.length; i++) {
+
+        if (dropdown.value === members[i].state) {
+            newFilteredStates.push(members[i]);
+        } else if (dropdown.value === "all") {
+            newFilteredStates = members[i].state;
+        }
+        // filteredStates = filteredStates.sort((a, b) => {
+        //     return a.filteredStates - b.filteredStates;
+        // });
+        // console.log(filteredStates);
+    }
+
+
+    makeTable(newFilteredStates);
+}
+filterState()
+
+
+
+//Create event for every value of inputs
+for (let i = 0; i < checkBoxes.length; i++) {
+    checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+};
+
+
+function filterData() {
+    // console.log("filter data function runs")
+    filteredMembers.length = 0;
+    document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
+    for (let i = 0; i < members.length; i++) {
+        if (checkBoxes[0].checked === true && members[i].party === "D") {
+            filteredMembers.push(members[i]); 
+        } else if (checkBoxes[1].checked === true && members[i].party === "R") {
+            filteredMembers.push(members[i]);
+        } else if (checkBoxes[2].checked === true && members[i].party === "I") {
+            filteredMembers.push(members[i]);
+        } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
+            document.getElementById("alert").style.display = "block" // if all boxes are unchecked, display alert
+            document.getElementById("alert").style.color = "red"
+        }
+    }
+    makeTable(filteredMembers); // Create the table every time the function is being called. Function is called when there is a change in eventListener
+}
+filterData(); //When removing this, table is not visible
 
 
 
 // Create table Senate
-function makeTable(x, y) {
+function makeTable(x, y, z) {
+    document.getElementById("senate-data").innerHTML = "";
 
     // Create table header
     let tHead = table.createTHead();
@@ -35,112 +143,54 @@ function makeTable(x, y) {
     let cellText05 = document.createTextNode("% Votes w/ Party");
     cell05.appendChild(cellText05);
 
-
-
-
-
-
     // Loop in the JSON data in each element of members
-    for (let element of members) {
-        // A variable created called "element" to provide the value of each index item (index item is object itself)
-        let row = table.insertRow();
-        // A row is created for every index item (that is a property of the nested object "members")
+    for (let i = 0; i < x.length; i++) {
 
-        let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
-        // Create a variable that includes the three values of a name
+        let row = table.insertRow();
+        let url = x.url;
+        let fullName = x.first_name + " " + x.middle_name + " " + x.last_name;
+
         function fullname() {
-            if (element.middle_name === null) {
-                return fullName = element.first_name + " " + element.last_name;
+            if (x[i].middle_name === null) {
+                return fullName = x[i].first_name + " " + x[i].last_name;
             } else {
-                return fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
+                return fullName = x[i].first_name + " " + x[i].middle_name + " " + x[i].last_name;
             }
         };
         fullname(fullName);
-        // Change value of fullName depending on the conditional if the middle_name is "null"
 
-        let url = element.url;
-        // Create reference to URL
-
-        let cell1 = row.insertCell(); //Create a cell and inser it into the row
-        let a = document.createElement("a"); // Create an anchor tag, <a>
-        let cellText1 = document.createTextNode(fullName); // In this anchor tag, create e TextNode. Does not matter if <a> is before/after this line, because it will be appended to the anchor anyway.
-        a.appendChild(cellText1); // Append the TextNode to the <a>
-        a.href = url; // Set the href of the <a>, which is the variable url
-        a.target = "_blank"; // Opening the link should be in a new tab
-        cell1.appendChild(a); // Append the <a> to the cell
+        let cell1 = row.insertCell();
+        let a = document.createElement("a");
+        let cellText1 = document.createTextNode(fullname());
+        a.appendChild(cellText1);
+        a.href = url;
+        a.target = "_blank";
+        cell1.appendChild(a);
 
         let cell2 = row.insertCell();
-        let cellText2 = document.createTextNode(element.party);
+        let cellText2 = document.createTextNode(x[i].party);
         cell2.appendChild(cellText2);
 
         let cell3 = row.insertCell();
-        let cellText3 = document.createTextNode(element.state);
+        let cellText3 = document.createTextNode(x[i].state);
         cell3.appendChild(cellText3);
 
         let cell4 = row.insertCell();
-        let cellText4 = document.createTextNode(element.seniority);
+        let cellText4 = document.createTextNode(x[i].seniority);
         cell4.appendChild(cellText4);
 
         let cell5 = row.insertCell();
-        let cellText5 = document.createTextNode(element.votes_with_party_pct + "%");
+        let cellText5 = document.createTextNode(x[i].votes_with_party_pct + "%");
         cell5.appendChild(cellText5);
 
-        row.appendChild(cell1); // Add the cells with the text to the row
+        row.appendChild(cell1);
         row.appendChild(cell2);
         row.appendChild(cell3);
         row.appendChild(cell4);
         row.appendChild(cell5);
 
-        table.appendChild(row); // Add the row to the table
+        table.appendChild(row);
     }
-
 }
+makeTable(members, newFilteredStates, filteredMembers);
 
-makeTable(table, members);
-
-
-
-
-// let independent = document.getElementById("independent");
-// let democrat = document.getElementById("democrat");
-// let republican = document.getElementById("republican");
-
-// democrat.addEventListener("click", function () {
-//     filterData();
-// });
-// republican.addEventListener("click", function () {
-//     filterData();
-// });
-// independent.addEventListener("click", function () {
-//     filterData();
-// });
-
-// function filterData() {
-//     var filteredData = [];
-//     for (let element of members) {
-//         if (democrat.checked == true && element.party == "D") {
-//             filteredData.push(element);
-//         } else if (republican.checked == true && element.party == "R") {
-//             filteredData.push(element);
-//         } else if (independent.checked == true && element.party == "I") {
-//             filteredData.push(element);
-//         } else if (independent.checked == false && democrat.checked == false && republican.checked == false) {
-//             document.getElementById('alert').style.display = 'block';
-//         };
-//     }
-//     return filteredData;
-//     // console.log(filteredData);
-// }
-
-
-// let checkBoxes = ["democrat", "republican", "independent"]
-
-// function filterData(array, table) {
-//     for (let i = 0; i < array.length; i++) {
-//         if (checkBoxes[i].checked === false) {
-            
-//         }
-        
-//     }
-// }
-// fileterData(checkBoxes, table)
