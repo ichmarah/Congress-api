@@ -1,6 +1,6 @@
 // Global variables
 let table = document.getElementById("table-data");
-let members = data.results[0].members;
+// let members = data.results[0].members;
 let independent = document.querySelector("input[value=independent]"); // to makeoverview clearer, create variables for querySelector
 let democrat = document.querySelector("input[value=democrat]");
 let republican = document.querySelector("input[value=republican]");
@@ -10,6 +10,31 @@ let filteredStates = []; // in filterStates() method: to filter states from memb
 let optionList = ["All"]; // in createOption() method: to remove duplicates and create option element for each unique state
 let dropdown = document.querySelector(".select-state"); // Grab querySelector class from select element
 let filteredMembers = []; //in filterData() method: to be used as argument for creating table(use makeTable()) within this function
+
+
+
+
+console.log("About to fetch Congress 113 data");
+
+let api_url = "https://api.propublica.org/congress/v1/{113/senate/members.json";
+
+async function fetchSenate() {
+    let response = await fetch(api_url, {
+        method: "GET",
+        headers: {
+            "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
+        }
+    });
+    let info = await response.json();
+    let members = data.results[0].members;
+}
+fetchSenate()
+    .catch(error => {
+        console.log("error!")
+        console.error(error);
+    });
+
+
 
 
 
@@ -82,7 +107,7 @@ filterData();
 
 // Create table for both senate and house congress 113
 function makeTable(x, y) {
-    document.getElementById("table-data").innerHTML = "";// You want this for when there are no checkboxex selected, the table is empty and removes from the screen (but the function is not removed!)
+    document.getElementById("table-data").innerHTML = ""; // You want this for when there are no checkboxex selected, the table is empty and removes from the screen (but the function is not removed!)
 
     // Create table header
     let tHead = table.createTHead();
