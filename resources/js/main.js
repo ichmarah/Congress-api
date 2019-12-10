@@ -1,6 +1,5 @@
 // Global variables
 let table = document.getElementById("table-data");
-// let members = data.results[0].members;
 let independent = document.querySelector("input[value=independent]"); // to makeoverview clearer, create variables for querySelector
 let democrat = document.querySelector("input[value=democrat]");
 let republican = document.querySelector("input[value=republican]");
@@ -12,30 +11,46 @@ let dropdown = document.querySelector(".select-state"); // Grab querySelector cl
 let filteredMembers = []; //in filterData() method: to be used as argument for creating table(use makeTable()) within this function
 
 
-
-
+let members = [];
 console.log("About to fetch Congress 113 data");
 
-let api_url = "https://api.propublica.org/congress/v1/{113/senate/members.json";
+let api_url = "https://api.propublica.org/congress/v1/113/senate/members.json"; //Variable to "easify"
 
-async function fetchSenate() {
-    let response = await fetch(api_url, {
+fetchSenate()
+
+async function fetchSenate() { //async lets know that while this function is in process, the pc can keep reading the other functions
+
+    console.log(members) // fetch() is chained to .then and catch (fetc().then().catch())
+    members = await fetch(api_url, { 
         method: "GET",
         headers: {
             "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
         }
-    });
-    let info = await response.json();
-    let members = data.results[0].members;
+    })
+    .then(response => response.json()) //Use .then() when something is successful. CAn only be used in async.
+    .then( data => data.results[0].members)
+    .catch(error => console.error(error));
+
+    console.log(members)
+ 
+
+    // // Event Listener for dropdown
+    dropdown.addEventListener("change", filterData);
+    //Create event for every value of inputs
+    for (let i = 0; i < checkBoxes.length; i++) {
+        checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+    };
+
+    filterStates();
+
+    createOption();
+
+    filterData();
+
+    makeTable(members, filteredMembers);
+
+    makeTable(filteredMembers);
 }
-fetchSenate()
-    .catch(error => {
-        console.log("error!")
-        console.error(error);
-    });
-
-
-
 
 
 // Grab all states from members[i] and sort them alphabetically
@@ -46,8 +61,8 @@ function filterStates() {
     console.log(filteredStates); // 105 states unalphabetically
     filteredStates = filteredStates.sort()
 }
-filterStates();
-console.log(filteredStates) // total of 105 options but there are less amount of states in US. Need to prevent duplicates
+
+// console.log(filteredStates) // total of 105 options but there are less amount of states in US. Need to prevent duplicates
 
 
 // Create options element for the select dropdown
@@ -60,26 +75,26 @@ function createOption() {
             }
         }
     }
-    console.log(optionList)
+    // console.log(optionList)
     // Actual creation of options for select element
     for (let i = 0; i < optionList.length; i++) {
         let option = document.createElement("option");
         option.text = optionList[i];
         option.value = optionList[i];
         dropdown.appendChild(option);
-        console.log(option);
+        // console.log(option);
     }
 }
-createOption();
+// createOption();
 
 
 
 // Create event listener for dropdown
-dropdown.addEventListener("change", filterData);
-//Create event for every value of inputs
-for (let i = 0; i < checkBoxes.length; i++) {
-    checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
-};
+// dropdown.addEventListener("change", filterData);
+// //Create event for every value of inputs
+// for (let i = 0; i < checkBoxes.length; i++) {
+//     checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+// };
 
 
 function filterData() {
@@ -101,12 +116,12 @@ function filterData() {
     }
     makeTable(filteredMembers); // Create the table every time the function is being called. Function is called when there is a change in eventListener
 }
-filterData();
+// 
 
 
 
 // Create table for both senate and house congress 113
-function makeTable(x, y) {
+function makeTable(x) {
     document.getElementById("table-data").innerHTML = ""; // You want this for when there are no checkboxex selected, the table is empty and removes from the screen (but the function is not removed!)
 
     // Create table header
@@ -182,4 +197,3 @@ function makeTable(x, y) {
         table.appendChild(row);
     }
 }
-makeTable(members, filteredMembers);
