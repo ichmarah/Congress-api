@@ -10,14 +10,7 @@ let optionList = ["All"]; // in createOption() method: to remove duplicates and 
 let dropdown = document.querySelector(".select-state"); // Grab querySelector class from select element
 let filteredMembers = []; //in filterData() method: to be used as argument for creating table(use makeTable()) within this function
 
-// // Create loader(spinner)
-// function showLoader() {
-//     table.addEventListener("load", () => {
-//         let loader = document.querySelector(".loader");
-//         loader.className += " hidden";
-//     })
-// }
-// showLoader()
+
 
 let members;
 console.log("About to fetch Congress 113 data");
@@ -40,7 +33,10 @@ if (window.location.pathname.includes("senate")) {
 
 async function fetchData(api_url) { //async lets know that while fetching data is in process, the pc can keep reading the other functions and execute them (such as checkboxes and select box)
     console.log(members) // fetch() is chained to .then and catch (fetch().then().catch())
-    members = await fetch(api_url, {
+    document.getElementById("alert").style.display = "none";
+
+
+    await fetch(api_url, {
             method: "GET",
             headers: {
                 "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
@@ -48,19 +44,19 @@ async function fetchData(api_url) { //async lets know that while fetching data i
         })
 
         .then(response => response.json()) //Use .then() when something is successful. CAn only be used in async.
-        .then(data => data.results[0].members)
+        .then(function (data) {
+
+            members = data.results[0].members;
+
+            document.getElementById("loader").style.visibility = "hidden";
+            // // Event Listener for dropdown
+            dropdown.addEventListener("change", filterData);
+            //Create event for every value of inputs
+            for (let i = 0; i < checkBoxes.length; i++) {
+                checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+            };
+        })
         .catch(error => console.error(error));
-
-    console.log(members)
-
-
-
-    // // Event Listener for dropdown
-    dropdown.addEventListener("change", filterData);
-    //Create event for every value of inputs
-    for (let i = 0; i < checkBoxes.length; i++) {
-        checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
-    };
 
     filterStates();
 
@@ -71,8 +67,9 @@ async function fetchData(api_url) { //async lets know that while fetching data i
     makeTable(members, filteredMembers);
 
     makeTable(filteredMembers);
-
 }
+
+
 
 
 
@@ -109,7 +106,6 @@ function createOption() {
     }
 }
 // createOption();
-
 
 
 

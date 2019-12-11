@@ -48,21 +48,27 @@ footer.container {
     text-align: right;
 }
 
-.loader{
+#loader {
     justify-content: center;
     width: 100%;
-}
-@keyframes fadeOut {
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
+    position: relative;
+    /* top: 0;
+    bottom: 0; */
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
-.loader.hidden { /* The hidden class is not included in html but is set with vanilla JS*/ 
-    animation: fadeOut 3s;
-    animation-fill-mode: forwards; /* Makes sure that once the animation is over, the fadeOut is continue to happen*/
-} /* Got info from: https://www.youtube.com/watch?v=xuA83OYTE7I */
+#loader strong {
+    font-size: 2em;
+    color: rgb(0, 172, 0)
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    color: rgb(0, 172, 0)
+}
 
 .table td {
     text-align: center;

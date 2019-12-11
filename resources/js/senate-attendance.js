@@ -1,6 +1,6 @@
-let table = document.getElementById("senate-att-glance");
-let tableL = document.getElementById("senate-att-l");
-let tableM = document.getElementById("senate-att-m");
+let tableG = document.getElementById("att-glance");
+let tableL = document.getElementById("att-l");
+let tableM = document.getElementById("att-m");
 let members = data.results[0].members;
 
 // Get number of members in each party
@@ -82,7 +82,7 @@ getAvg();
 // Create table Senate  at glance
 function makeGlanceTable() {
     // Create table header
-    let tHead = table.createTHead();
+    let tHead = tableG.createTHead();
     let rowHead = tHead.insertRow(); // Insert a row to the table header
 
     let cell01 = rowHead.insertCell(); // Insert a cell in on row header
@@ -106,7 +106,7 @@ function makeGlanceTable() {
     for (let partyName in statistics) {
         // console.log(`${partyName}: ${statistics[partyName].num}`); // Check if template literals actually work
 
-        let row = table.insertRow();
+        let row = tableG.insertRow();
 
         let cell1 = row.insertCell();
         let cell1Text = document.createTextNode(`${partyName}`); // Text node is the value which the template is referring to
@@ -127,7 +127,7 @@ function makeGlanceTable() {
         row.appendChild(cell2);
         row.appendChild(cell3);
 
-        table.appendChild(row);
+        tableG.appendChild(row);
     }
 }
 makeGlanceTable()
