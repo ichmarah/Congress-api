@@ -10,50 +10,44 @@ let optionList = ["All"]; // in createOption() method: to remove duplicates and 
 let dropdown = document.querySelector(".select-state"); // Grab querySelector class from select element
 let filteredMembers = []; //in filterData() method: to be used as argument for creating table(use makeTable()) within this function
 
-// // Create loader(spinner)
-// function showLoader() {
-//     table.addEventListener("load", () => {
-//         let loader = document.querySelector(".loader");
-//         loader.className += " hidden";
-//     })
-// }
-// showLoader()
+// Create loader(spinner)
+function showLoader() {
+    table.addEventListener("load", () => {
+        let loader = document.querySelector(".loader");
+        loader.className += " hidden";
+    })
+}
+showLoader()
 
-let members;
+
+let members = [];
 console.log("About to fetch Congress 113 data");
 
-/*
-No need to include the other pages in the conditional 
-because the conditional checks if the pathname includes "senate" or "house" 
-*/
-let api_url;
-if (window.location.pathname.includes("senate")) {
-    api_url = "https://api.propublica.org/congress/v1/113/senate/members.json";
-    fetchData(api_url);
-    // console.log(api_url)
-} else if (window.location.pathname.includes("house")) {
-    api_url = "https://api.propublica.org/congress/v1/113/house/members.json";
-    fetchData(api_url);
-    // console.log(api_url) 
-}
-// console.log(api_url)
+let apiUrlSenate = "https://api.propublica.org/congress/v1/113/senate/members.json"; //Variable to "easify"
+let apiUrlHouse = "https://api.propublica.org/congress/v1/113/house/members.json";
 
-async function fetchData(api_url) { //async lets know that while fetching data is in process, the pc can keep reading the other functions and execute them (such as checkboxes and select box)
-    console.log(members) // fetch() is chained to .then and catch (fetch().then().catch())
-    members = await fetch(api_url, {
-            method: "GET",
-            headers: {
-                "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
-            }
-        })
 
-        .then(response => response.json()) //Use .then() when something is successful. CAn only be used in async.
-        .then(data => data.results[0].members)
-        .catch(error => console.error(error));
+
+fetchSenate()
+
+
+
+async function fetchSenate() { //async lets know that while this function is in process, the pc can keep reading the other functions
+
+    console.log(members) // fetch() is chained to .then and catch (fetc().then().catch())
+    members = await fetch(apiUrlSenate, { 
+        method: "GET",
+        headers: {
+            "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
+        }
+    })
+    
+    .then(response => response.json()) //Use .then() when something is successful. CAn only be used in async.
+    .then( data => data.results[0].members)
+    .catch(error => console.error(error));
 
     console.log(members)
-
-
+ 
 
     // // Event Listener for dropdown
     dropdown.addEventListener("change", filterData);
@@ -71,9 +65,7 @@ async function fetchData(api_url) { //async lets know that while fetching data i
     makeTable(members, filteredMembers);
 
     makeTable(filteredMembers);
-
 }
-
 
 
 // Grab all states from members[i] and sort them alphabetically
@@ -111,6 +103,13 @@ function createOption() {
 // createOption();
 
 
+
+// Create event listener for dropdown
+// dropdown.addEventListener("change", filterData);
+// //Create event for every value of inputs
+// for (let i = 0; i < checkBoxes.length; i++) {
+//     checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
+// };
 
 
 function filterData() {

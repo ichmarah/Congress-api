@@ -24,7 +24,7 @@
 footer.container {
     position: relative;
     bottom: 0;
-    
+
 }
 
 .footer-text {
@@ -33,7 +33,7 @@ footer.container {
 
 .h-100 {
     height: 100% !important;
-    
+
 }
 
 .h1 {
@@ -47,6 +47,22 @@ footer.container {
 .h2.align-right {
     text-align: right;
 }
+
+.loader{
+    justify-content: center;
+    width: 100%;
+}
+@keyframes fadeOut {
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.loader.hidden { /* The hidden class is not included in html but is set with vanilla JS*/ 
+    animation: fadeOut 3s;
+    animation-fill-mode: forwards; /* Makes sure that once the animation is over, the fadeOut is continue to happen*/
+} /* Got info from: https://www.youtube.com/watch?v=xuA83OYTE7I */
 
 .table td {
     text-align: center;

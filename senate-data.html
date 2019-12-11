@@ -50,7 +50,8 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="house-data.html">House</a>
-                                <a class="dropdown-item" href="senate-data.html">Senate</a>
+                                <a class="dropdown-item" href="senate-data.html">Senate <span
+                                    class="sr-only">(current)</span></a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -109,9 +110,15 @@
 
             <select class="select-state">
             </select>
-
+            <!-- <div class="loader"></div> -->
             <table id="table-data" class="table table-borderless">
+                
             </table>
+            <div class="loader d-flex align-items-center">
+                    <strong>Loading...</strong>
+                    <div class="spinner-border sl-auto" role="status" aria-hidden="true"></div>
+                </div>
+
             <p id="alert">Please select a checkbox!</p>
 
         </main>
@@ -142,7 +149,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 
-<script src="resources/js/pro-Congress-113-senate.js"></script>
+<!-- <script src="resources/js/pro-Congress-113-senate.js"></script> -->
 <script src="resources/js/main.js"></script>
 
 </html>
