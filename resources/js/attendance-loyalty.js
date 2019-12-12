@@ -1,6 +1,6 @@
-let table = document.getElementById("house-att-glance");
-let tableL = document.getElementById("house-att-l");
-let tableM = document.getElementById("house-att-m");
+let tableG = document.getElementById("att-loy-glance");
+let tableL = document.getElementById("att-loy-l");
+let tableM = document.getElementById("att-loy-m");
 let members = data.results[0].members;
 
 // Get number of members in each party
@@ -21,12 +21,12 @@ function getList() {
             indList++;
         }
     }
-    console.log("Sum demList: " + demList); // Sum demList 210 
-    console.log("Sum repList: " + repList); // Sum demList 240
-    console.log("Sum indList: " + indList); // Sum demList 0
+    console.log("Sum demList: " + demList); // Sum demList 57
+    console.log("Sum repList: " + repList); // Sum demList 46
+    console.log("Sum indList: " + indList); // Sum demList 2
 
     let totNum = demList + repList + indList; // To check if total amount is indeed 105
-    console.log("Total list: " + totNum); // 450
+    console.log("Total list: " + totNum); // 105
 }
 getList();
 
@@ -45,7 +45,7 @@ let totAvgVWP = 0;
 function getAvg() {
     for (let element of members) {
         let vwp = element.votes_with_party_pct; // to make it easier instead of using the long name
-        // console.log("vwp: " + vwp);
+        console.log("vwp: " + vwp);
         if (element.party === "D") {
             demAvgVWP += vwp; // Total of the percentages
         } else if (element.party === "R") {
@@ -72,16 +72,17 @@ function getAvg() {
 }
 getAvg();
 
-// demAvgVWP: 89.69 %
-// remAvgVWP: 93.35 %
-// indAvgVWP: 0 %
-// totAvgVWO: 91.64  %
+// demAvgVWP: 96.97052631578948 %
+// remAvgVWP: 88.8445652173913 %
+// indAvgVWP: 95.17500000000001 %
+
+
 
 
 // Create table Senate  at glance
 function makeGlanceTable() {
     // Create table header
-    let tHead = table.createTHead();
+    let tHead = tableG.createTHead();
     let rowHead = tHead.insertRow(); // Insert a row to the table header
 
     let cell01 = rowHead.insertCell(); // Insert a cell in on row header
@@ -105,7 +106,7 @@ function makeGlanceTable() {
     for (let partyName in statistics) {
         // console.log(`${partyName}: ${statistics[partyName].num}`); // Check if template literals actually work
 
-        let row = table.insertRow();
+        let row = tableG.insertRow();
 
         let cell1 = row.insertCell();
         let cell1Text = document.createTextNode(`${partyName}`); // Text node is the value which the template is referring to
@@ -113,12 +114,12 @@ function makeGlanceTable() {
         cell1.appendChild(cell1Text);
 
         let cell2 = row.insertCell();
-        let cell2Text = document.createTextNode(`${statistics[partyName].house_att_num}`);
+        let cell2Text = document.createTextNode(`${statistics[partyName].sen_att_num}`);
         console.log(cell2Text);
         cell2.appendChild(cell2Text);
 
         let cell3 = row.insertCell();
-        let cell3Text = document.createTextNode(`${statistics[partyName].house_att_votes}` + "%");
+        let cell3Text = document.createTextNode(`${statistics[partyName].sen_att_votes}` + "%");
         console.log(cell3Text);
         cell3.appendChild(cell3Text);
 
@@ -126,10 +127,26 @@ function makeGlanceTable() {
         row.appendChild(cell2);
         row.appendChild(cell3);
 
-        table.appendChild(row);
+        tableG.appendChild(row);
     }
 }
 makeGlanceTable()
+
+
+/*
+Display top 10% least engaged in the table, sort, and handle duplicate data points (from members)
+1. Function to Sort members.missed_votes_pct --> sorted should be descending order 
+2. use compare function to sort numbers correctly (function within function)
+3. members.length * 0.1 = 105 * 0.1 = 10.5 
+4. let leastPct = slice from the sort position 0 to 10 (why also 11 to check if the last two are the same???)
+    (ED: is not a correct way)
+    Should be: array * 0.10
+5. for of loop through leastPct (if members.missed_votes_pct == leastPct, create let cell1,
+    create anchor tag, create cell1Text = document.createTExtNode(members.name),
+    append text to anchor, use target:_blank, append anchor to cell)
+*/
+
+
 
 
 
@@ -155,10 +172,14 @@ function getLeast(x, ) {
 }
 getLeast(lvpList, mvpList);
 
+
+
 let lvp10 = lvpList.slice(0, (lvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("lvp10: " + lvp10);
 let mvp10 = mvpList.slice(0, (mvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
 console.log("mvp10: " + mvp10);
+
+
 
 
 
@@ -192,7 +213,6 @@ function makeHeaderLM() {
 makeHeaderLM();
 
 
-
 function makeTableLeast() {
     for (let element of members) {
         let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
@@ -207,7 +227,7 @@ function makeTableLeast() {
         fullname(fullName);
 
         for (let i = 0; i <= lvp10.length; i++) {
-            if (lvp10[i] === lvp10[i-1]) {
+            if (lvp10[i] === lvp10[i - 1]) {
                 continue;
             } else if (element.missed_votes_pct === lvp10[i]) {
                 let rowL = tableL.insertRow()
@@ -235,7 +255,6 @@ function makeTableLeast() {
 
 
                 tableL.appendChild(rowL);
- 
             } else {
                 continue;
             }
@@ -264,7 +283,7 @@ function makeTableMost() {
         fullname(fullName);
 
         for (let i = 0; i <= mvp10.length; i++) {
-            if (mvp10[i] === mvp10[i-1]) {
+            if (mvp10[i] === mvp10[i - 1]) {
                 continue;
             } else if (element.missed_votes_pct === mvp10[i]) {
                 let rowM = tableM.insertRow()
@@ -293,7 +312,7 @@ function makeTableMost() {
 
                 tableM.appendChild(rowM);
 
-                
+
             } else {
                 continue;
             }

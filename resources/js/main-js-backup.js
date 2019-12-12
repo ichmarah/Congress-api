@@ -1,37 +1,73 @@
-// Global variables
+// Global variables for Congress
 let table = document.getElementById("table-data");
-let members = data.results[0].members;
 let independent = document.querySelector("input[value=independent]");
 let democrat = document.querySelector("input[value=democrat]");
 let republican = document.querySelector("input[value=republican]");
 let checkBoxes = [democrat, republican, independent];
-// console.log(checkBoxes)
+let filteredStates = [];
+let optionList = ["All"];
+let dropdown = document.querySelector(".select-state");
+let filteredMembers = [];
 
-var filteredStates = []; // to filter states and sorted alphabetically
-let optionList = ["All"]; // sorted states without duplicates
-
-let dropdown = document.querySelector(".select-state")
-let newFilteredStates = [];
-
-let filteredMembers = []; //to be used as argument to create table in the filter filterDate() function 
+// Global variables for Attendance
 
 
 
-// Grab all states and sort them alphabetically
+////****************************** Fetch data ******************************
+let members;
+let api_url;
+if (window.location.pathname.includes("senate")) {
+    api_url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+    fetchData(api_url);
+} else if (window.location.pathname.includes("house")) {
+    api_url = "https://api.propublica.org/congress/v1/113/house/members.json";
+    fetchData(api_url);
+}
+
+
+async function fetchData(api_url) {
+    document.getElementById("alert").style.display = "none";
+    
+    await fetch(api_url, {
+            method: "GET",
+            headers: {
+                "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
+            }
+        })
+        .then(response => response.json())
+        .then(function (data) {
+            members = data.results[0].members;
+            document.getElementById("loader").style.visibility = "hidden";
+
+        })
+        .catch(error => console.error(error));
+        
+    dropdown.addEventListener("change", filterData);
+    for (let i = 0; i < checkBoxes.length; i++) {
+        checkBoxes[i].addEventListener("change", filterData);
+    };
+    filterStates();
+    createOption();
+    filterData();
+    makeTable(members, filteredMembers);
+    makeTable(filteredMembers);
+}
+
+
+
+
+
+//****************************** functions Congress page ******************************
 function filterStates() {
     for (i = 0; i < members.length; i++) {
         filteredStates.push(members[i].state);
     }
-    console.log(filteredStates);
     filteredStates = filteredStates.sort()
 }
-filterStates();
-console.log(filteredStates) // total of 105 options but there are less amount of states in US. Need to prevent duplicates
 
 
-// Create options element for the select dropdown
+
 function createOption() {
-    // First, filter throught states to remove duplicates
     for (let i = 0; i < filteredStates.length; i++) {
         for (let j = 0; j < filteredStates.length; j++) {
             if (filteredStates[i] === filteredStates[j] && !optionList.includes(filteredStates[i])) {
@@ -39,33 +75,20 @@ function createOption() {
             }
         }
     }
-    console.log(optionList)
-    // Actual creation of options for select element
+
     for (let i = 0; i < optionList.length; i++) {
         let option = document.createElement("option");
         option.text = optionList[i];
         option.value = optionList[i];
         dropdown.appendChild(option);
-        console.log(option);
-        
     }
 }
-createOption();
 
-
-
-// Create event listener for dropdown
-dropdown.addEventListener("change", filterData);
-//Create event for every value of inputs
-for (let i = 0; i < checkBoxes.length; i++) {
-    checkBoxes[i].addEventListener("change", filterData); // When checkBoxes[i] is changed, apply filterData()
-};
 
 
 function filterData() {
     filteredMembers.length = 0;
-    
-    document.getElementById("alert").style.display = "none" // Do not display the alert for checking a box when boxes are checked
+    document.getElementById("alert").style.display = "none"
     for (let i = 0; i < members.length; i++) {
         if (dropdown.value === members[i].state || dropdown.value === "All") {
             if (checkBoxes[0].checked === true && members[i].party === "D") {
@@ -75,29 +98,25 @@ function filterData() {
             } else if (checkBoxes[2].checked === true && members[i].party === "I") {
                 filteredMembers.push(members[i]);
             } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
-                document.getElementById("alert").style.display = "block" // if all boxes are unchecked, display alert
+                document.getElementById("alert").style.display = "block"
                 document.getElementById("alert").style.color = "red"
             }
         }
-
     }
-    makeTable(filteredMembers); // Create the table every time the function is being called. Function is called when there is a change in eventListener
+    makeTable(filteredMembers);
 }
-filterData(); //When removing this, table is not visible
 
 
 
-// Create table Senate
-function makeTable(x, y) {
+function makeTable(x) {
     document.getElementById("table-data").innerHTML = "";
 
-    // Create table header
     let tHead = table.createTHead();
-    let rowHead = tHead.insertRow(); // Insert a row to the table header
+    let rowHead = tHead.insertRow();
 
-    let cell01 = rowHead.insertCell(); // Insert a cell in on row header
-    let cellText01 = document.createTextNode("Name"); // Create text to go in cell
-    cell01.appendChild(cellText01); // Add the text in the cell
+    let cell01 = rowHead.insertCell();
+    let cellText01 = document.createTextNode("Name");
+    cell01.appendChild(cellText01);
 
     let cell02 = rowHead.insertCell();
     let cellText02 = document.createTextNode("Party");
@@ -115,7 +134,6 @@ function makeTable(x, y) {
     let cellText05 = document.createTextNode("% Votes w/ Party");
     cell05.appendChild(cellText05);
 
-    // Loop in the JSON data in each element of members
     for (let i = 0; i < x.length; i++) {
 
         let row = table.insertRow();
@@ -164,4 +182,7 @@ function makeTable(x, y) {
         table.appendChild(row);
     }
 }
-makeTable(members, filteredMembers);
+
+
+
+//==================== functions Attendance page====================
