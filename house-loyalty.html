@@ -70,7 +70,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="house-loyalty.html">House <span
-                                    class="sr-only">(current)</span></a>
+                                        class="sr-only">(current)</span></a>
                                 <a class="dropdown-item" href="senate-loyalty.html">Senate</a>
                             </div>
                         </li>
@@ -91,6 +91,10 @@
                 </div>
                 <div class="col-6">
                     <p class="h2 align-right">House at Glance</p>
+                    <div id="loader" class=" d-flex align-items-center">
+                        <strong>Loading...</strong>
+                        <div class="spinner-border sl-auto" role="status" aria-hidden="true"></div>
+                    </div>
                     <table id="att-loy-glance" class="table table-borderless">
                     </table>
                 </div>
@@ -141,9 +145,9 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 
-<script src="resources/js/pro-Congress-113-house.js"></script>
+<!-- <script src="resources/js/pro-Congress-113-house.js"></script> -->
 <script src="resources/js/statistics.js"></script>
-<script src="resources/js/attendance-loyalty.js"></script>
+<script src="resources/js/main.js"></script>
 
 
 </html>

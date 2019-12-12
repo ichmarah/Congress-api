@@ -51,7 +51,7 @@ footer.container {
 #loader {
     justify-content: center;
     width: 100%;
-    position: absolute;
+    position: relative;
     z-index: 10;
     /* top: 0;
     bottom: 0; */

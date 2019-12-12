@@ -1,33 +1,36 @@
-//====================== Global variables for Congress ====================== 
+// Global variables Congress
 let table = document.getElementById("table-data");
-let independent = document.querySelector("input[value=independent]");
+let independent = document.querySelector("input[value=independent]"); 
 let democrat = document.querySelector("input[value=democrat]");
 let republican = document.querySelector("input[value=republican]");
 let checkBoxes = [democrat, republican, independent];
-let filteredStates = [];
-let optionList = ["All"];
-let dropdown = document.querySelector(".select-state");
-let filteredMembers = [];
+let filteredStates = []; 
+let optionList = ["All"]; 
+let dropdown = document.querySelector(".select-state"); 
+let filteredMembers = []; 
 
-//====================== Global variables for Attendance ====================== 
-let tableG = document.getElementById("att-loy-glance");
-let tableL = document.getElementById("att-loy-l");
-let tableM = document.getElementById("att-loy-m");
-let demList = 0;
-let repList = 0;
-let indList = 0;
-let demAvgVWP = 0;
-let repAvgVWP = 0;
-let indAvgVWP = 0;
-let totAvgVWP = 0;
-let lvpList = [];
-let mvpList = [];
+// Global variables for attendance
+let tableG = document.getElementById("att-glance");
+let tableL = document.getElementById("att-l");
+let tableM = document.getElementById("att-m");
 
-//====================== Fetch data general ======================
-let members;
+
+// ==================Async/await Congress, Attendance==================
+let members = [];
 let api_url;
+if (window.location.pathname.includes("senate")) {
+    api_url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+    fetchData(api_url);
+    console.log(api_url)
+} else if (window.location.pathname.includes("house")) {
+    api_url = "https://api.propublica.org/congress/v1/113/house/members.json";
+    fetchData(api_url);
+    console.log(api_url)
+}
 
-async function fetchData(api_url) {
+async function fetchData(api_url) { 
+    document.getElementById("alert").style.display = "none";
+
     await fetch(api_url, {
             method: "GET",
             headers: {
@@ -37,59 +40,59 @@ async function fetchData(api_url) {
         .then(response => response.json())
         .then(function (data) {
             members = data.results[0].members;
-            return members;
+            document.getElementById("loader").style.visibility = "hidden";
         })
-        .catch(error => console.error(error))
-};
+        .catch(error => console.error(error));
 
-if (window.location.pathname.includes("senate")) {
-    api_url = "https://api.propublica.org/congress/v1/113/senate/members.json";
-    fetchData(api_url);
-} else if (window.location.pathname.includes("house")) {
-    api_url = "https://api.propublica.org/congress/v1/113/house/members.json";
-    fetchData(api_url);
+    dropdown.addEventListener("change", filterData);
+
+    for (let i = 0; i < checkBoxes.length; i++) {
+        checkBoxes[i].addEventListener("change", filterData); 
+    };
+
+    filterStates();
+    createOption();
+    filterData();
+    makeTable(members, filteredMembers);
+    makeTable(filteredMembers);
 }
 
-//====================== Fetch data for pages ====================== 
-let currentPage = window.location.pathname;
-switch (true) {
-    case currentPage.includes("data"):
-        document.getElementById("alert").style.display = "none";
-        fetchData(api_url)
-            .then(function (data) {
-                dropdown.addEventListener("change", filterData);
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    checkBoxes[i].addEventListener("change", filterData);
-                }
-                filterStates();
-                createOption();
-                filterData();
-                makeTable(members, filteredMembers);
-                makeTable(filteredMembers);
-            })
-            .catch(error => console.error(error));
-    case currentPage.includes("attendance") || currentPage.includes("loyalty"):
-        fetchData(api_url)
-            .then(function (data) {
-                document.getElementById("loader").style.visibility = "hidden";
-                getList();
-                getAvg();
-                makeGlanceTable();
-                getLeast(lvpList, mvpList);
-                makeHeaderLM();
-                makeTableLeast();
-                makeTableMost();
-            })
-            .catch(error => console.error(error));
+
+
+async function fetchData(api_url) { 
+    await fetch(api_url, {
+            method: "GET",
+            headers: {
+                "X-API-key": "CoA9BlnMvipImxDh0XmQSmz9EcwJwtqvGrjlhvSI"
+            }
+        })
+        .then(response => response.json()) 
+        .then(function (data) {
+            members = data.results[0].members;
+        })
+        .catch(error => console.error(error));
+
+    getList(members);
+    getAvg();
+    makeGlanceTable();
+    getLeast(lvpList, mvpList);
+    makeHeaderLM();
+    makeTableLeast();
+    makeTableMost();
+
 }
 
-//====================== functions Congress page ======================
+
+
+// ==================Congress page functions==================
 function filterStates() {
     for (i = 0; i < members.length; i++) {
         filteredStates.push(members[i].state);
     }
     filteredStates = filteredStates.sort()
 }
+
+
 
 function createOption() {
     for (let i = 0; i < filteredStates.length; i++) {
@@ -99,7 +102,7 @@ function createOption() {
             }
         }
     }
-
+    
     for (let i = 0; i < optionList.length; i++) {
         let option = document.createElement("option");
         option.text = optionList[i];
@@ -108,8 +111,10 @@ function createOption() {
     }
 }
 
+
+
 function filterData() {
-    filteredMembers.length = 0;
+    filteredMembers.length = 0; 
     document.getElementById("alert").style.display = "none"
     for (let i = 0; i < members.length; i++) {
         if (dropdown.value === members[i].state || dropdown.value === "All") {
@@ -120,23 +125,26 @@ function filterData() {
             } else if (checkBoxes[2].checked === true && members[i].party === "I") {
                 filteredMembers.push(members[i]);
             } else if (checkBoxes[0].checked === false && checkBoxes[1].checked === false && checkBoxes[2].checked === false) {
-                document.getElementById("alert").style.display = "block"
+                document.getElementById("alert").style.display = "block" 
                 document.getElementById("alert").style.color = "red"
             }
         }
     }
-    makeTable(filteredMembers);
+    makeTable(filteredMembers); 
 }
+ 
+
 
 function makeTable(x) {
-    document.getElementById("table-data").innerHTML = "";
+    document.getElementById("table-data").innerHTML = ""; // You want this for when there are no checkboxex selected, the table is empty and removes from the screen (but the function is not removed!)
 
+    // Create table header
     let tHead = table.createTHead();
-    let rowHead = tHead.insertRow();
+    let rowHead = tHead.insertRow(); // Insert a row to the table header
 
-    let cell01 = rowHead.insertCell();
-    let cellText01 = document.createTextNode("Name");
-    cell01.appendChild(cellText01);
+    let cell01 = rowHead.insertCell(); // Insert a cell in on row header
+    let cellText01 = document.createTextNode("Name"); // Create text to go in cell
+    cell01.appendChild(cellText01); // Add the text in the cell
 
     let cell02 = rowHead.insertCell();
     let cellText02 = document.createTextNode("Party");
@@ -154,6 +162,7 @@ function makeTable(x) {
     let cellText05 = document.createTextNode("% Votes w/ Party");
     cell05.appendChild(cellText05);
 
+    // Use this loop for when the arguments "members" and "filteredMembers" are passed through the function
     for (let i = 0; i < x.length; i++) {
 
         let row = table.insertRow();
@@ -203,10 +212,20 @@ function makeTable(x) {
     }
 }
 
-//==================== functions Attendance and Loyalty pages ====================
-function getList() {
+
+
+
+
+// ==================ATTENDANCE==================
+let demList = 0;
+let repList = 0;
+let indList = 0;
+
+function getList(x) {
     for (let element of members) {
         if (element.party === "D") {
+            // demList += demD.length; // This will give 1+1+1+1... until the loop ends and we get the sum
+            // Since we already know that the increment is always +1, we can use ++ and remove demD
             demList++;
         } else if (element.party == "R") {
             repList++;
@@ -214,35 +233,72 @@ function getList() {
             indList++;
         }
     }
-    let totNum = demList + repList + indList;
+    console.log("Sum demList: " + demList); // Sum demList 57
+    console.log("Sum repList: " + repList); // Sum demList 46
+    console.log("Sum indList: " + indList); // Sum demList 2
+
+    let totNum = demList + repList + indList; // To check if total amount is indeed 105
+    console.log("Total list: " + totNum); // 105
 }
+
+
+
+
+/* 
+Calculate the average "votes with party" for each party in percentage
+For each party, add the value of the new element to the values of previous element.
+Therefore, start with 0 as a basis.
+*/
+let demAvgVWP = 0;
+let repAvgVWP = 0;
+let indAvgVWP = 0;
+let totAvgVWP = 0;
 
 function getAvg() {
     for (let element of members) {
-        let vwp = element.votes_with_party_pct; 
+        let vwp = element.votes_with_party_pct; // to make it easier instead of using the long name
+        // console.log("vwp: " + vwp);
         if (element.party === "D") {
-            demAvgVWP += vwp; 
+            demAvgVWP += vwp; // Total of the percentages
         } else if (element.party === "R") {
-            repAvgVWP += vwp; 
+            repAvgVWP += vwp; // Total of the percentages
         } else {
             indAvgVWP += vwp;
         }
         totAvgVWP += vwp;
     }
+    console.log("Sum demAvgVWP: " + demAvgVWP);
+    console.log("Sum totAvgVWP: " + totAvgVWP);
 
-    demAvgVWP /= demList; 
+    demAvgVWP /= demList; // New total of dem percentages is dividing demAvgVWP by the total amount of Ds
+    console.log("demAvgVWP: " + demAvgVWP + " %"); // Check up: previous code works
+
     repAvgVWP /= repList;
+    console.log("remAvgVWP: " + repAvgVWP + " %");
+
     indAvgVWP /= indList;
+    console.log("indAvgVWP: " + indAvgVWP + " %");
+
     totAvgVWP /= members.length
+    console.log("totAvgVWP: " + totAvgVWP + "%");
 }
 
-function makeGlanceTable() {
-    let tHead = tableG.createTHead();
-    let rowHead = tHead.insertRow(); 
 
-    let cell01 = rowHead.insertCell(); 
-    let cellText01 = document.createTextNode("Party"); 
-    cell01.appendChild(cellText01); 
+// demAvgVWP: 96.97052631578948 %
+// remAvgVWP: 88.8445652173913 %
+// indAvgVWP: 95.17500000000001 %
+
+
+
+// Create table Senate  at glance
+function makeGlanceTable() {
+    // Create table header
+    let tHead = tableG.createTHead();
+    let rowHead = tHead.insertRow(); // Insert a row to the table header
+
+    let cell01 = rowHead.insertCell(); // Insert a cell in on row header
+    let cellText01 = document.createTextNode("Party"); // Create text to go in cell
+    cell01.appendChild(cellText01); // Add the text in the cell
 
     let cell02 = rowHead.insertCell();
     let cellText02 = document.createTextNode("No. of Reps ");
@@ -252,19 +308,30 @@ function makeGlanceTable() {
     let cellText03 = document.createTextNode("% Voted w/ Party");
     cell03.appendChild(cellText03);
 
+
+
+    /*
+     Create the rows based on info from statistics js file,
+     using template literals to prevent DRY and keep code as short as possible.
+    */
     for (let partyName in statistics) {
+        // console.log(`${partyName}: ${statistics[partyName].num}`); // Check if template literals actually work
+
         let row = tableG.insertRow();
 
         let cell1 = row.insertCell();
-        let cell1Text = document.createTextNode(`${partyName}`); 
+        let cell1Text = document.createTextNode(`${partyName}`); // Text node is the value which the template is referring to
+        // console.log(cell1Text);
         cell1.appendChild(cell1Text);
 
         let cell2 = row.insertCell();
         let cell2Text = document.createTextNode(`${statistics[partyName].sen_att_num}`);
+        // console.log(cell2Text);
         cell2.appendChild(cell2Text);
 
         let cell3 = row.insertCell();
         let cell3Text = document.createTextNode(`${statistics[partyName].sen_att_votes}` + "%");
+        // console.log(cell3Text);
         cell3.appendChild(cell3Text);
 
         row.appendChild(cell1);
@@ -275,19 +342,50 @@ function makeGlanceTable() {
     }
 }
 
+
+
+
+/*
+Display top 10% least engaged in the table, sort, and handle duplicate data points (from members)
+1. Function to Sort members.missed_votes_pct --> sorted should be descending order 
+2. use compare function to sort numbers correctly (function within function)
+3. members.length * 0.1 = 105 * 0.1 = 10.5 
+4. let leastPct = slice from the sort position 0 to 10 (why also 11 to check if the last two are the same???)
+    (ED: is not a correct way)
+    Should be: array * 0.10
+5. for of loop through leastPct (if members.missed_votes_pct == leastPct, create let cell1,
+    create anchor tag, create cell1Text = document.createTExtNode(members.name),
+    append text to anchor, use target:_blank, append anchor to cell)
+*/
+
+
+
+
+
+let lvpList = []; //create an empty array to push the sorted values in the array
+let mvpList = [];
+
 function getLeast(x) {
     for (let element of members) {
         lvpList.push(element.missed_votes_pct);
         mvpList.push(element.missed_votes_pct);
 
+
         lvpList = lvpList.sort((a, b) => {
             return b - a;
         });
+
         mvpList = mvpList.sort((a, b) => {
             return a - b;
         });
     }
+    // console.log("Sorted lvpList: " + lvpList);
+    // console.log("Sorted mvpList: " + mvpList);
 }
+
+
+
+
 
 function makeHeaderLM() {
     let tHeadL = tableL.createTHead();
@@ -317,11 +415,16 @@ function makeHeaderLM() {
     cell033.appendChild(cell033Text);
 }
 
+
+
 function makeTableLeast() {
-    let lvp10 = lvpList.slice(0, (lvpList.length * 0.10));
+    let lvp10 = lvpList.slice(0, (lvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+    console.log("lvp10: " + lvp10);
+
 
     for (let element of members) {
         let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
+        // Create a variable that includes the three values of a name
         function fullname() {
             if (element.middle_name === null) {
                 return fullName = element.first_name + " " + element.last_name;
@@ -363,14 +466,25 @@ function makeTableLeast() {
             } else {
                 continue;
             }
+
+
         };
+
+
     }
 }
 
+
+
+
 function makeTableMost() {
-    let mvp10 = mvpList.slice(0, (mvpList.length * 0.10));
+    let mvp10 = mvpList.slice(0, (mvpList.length * 0.10)); // Slicing the list at the 10th% of the list and rename this action as mvp10
+    console.log("mvp10: " + mvp10);
+
+
     for (let element of members) {
         let fullName = element.first_name + " " + element.middle_name + " " + element.last_name;
+        // Create a variable that includes the three values of a name
         function fullname() {
             if (element.middle_name === null) {
                 return fullName = element.first_name + " " + element.last_name;
@@ -407,10 +521,15 @@ function makeTableMost() {
                 rowM.appendChild(cell2M);
                 rowM.appendChild(cell3M);
 
+
                 tableM.appendChild(rowM);
+
+
             } else {
                 continue;
             }
+
         }
+
     }
 }
