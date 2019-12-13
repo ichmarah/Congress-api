@@ -1,3 +1,4 @@
+
 //====================== Fetch data general function ======================
 let members;
 let api_url;
@@ -92,7 +93,7 @@ switch (true) {
                     }
                 }
 
-                function makeTable(x) {
+                function makeTable(members) {
                     let table = document.getElementById("table-data");
                     document.getElementById("table-data").innerHTML = "";
 
@@ -119,17 +120,17 @@ switch (true) {
                     let cellText05 = document.createTextNode("% Votes w/ Party");
                     cell05.appendChild(cellText05);
 
-                    for (let i = 0; i < x.length; i++) {
+                    for (let i = 0; i < members.length; i++) {
 
                         let row = table.insertRow();
-                        let url = x.url;
-                        let fullName = x.first_name + " " + x.middle_name + " " + x.last_name;
+                        let url = members.url;
+                        let fullName = members.first_name + " " + members.middle_name + " " + members.last_name;
 
                         function fullname() {
-                            if (x[i].middle_name === null) {
-                                return fullName = x[i].first_name + " " + x[i].last_name;
+                            if (members[i].middle_name === null) {
+                                return fullName = members[i].first_name + " " + members[i].last_name;
                             } else {
-                                return fullName = x[i].first_name + " " + x[i].middle_name + " " + x[i].last_name;
+                                return fullName = members[i].first_name + " " + members[i].middle_name + " " + members[i].last_name;
                             }
                         };
                         fullname(fullName);
@@ -143,19 +144,19 @@ switch (true) {
                         cell1.appendChild(a);
 
                         let cell2 = row.insertCell();
-                        let cellText2 = document.createTextNode(x[i].party);
+                        let cellText2 = document.createTextNode(members[i].party);
                         cell2.appendChild(cellText2);
 
                         let cell3 = row.insertCell();
-                        let cellText3 = document.createTextNode(x[i].state);
+                        let cellText3 = document.createTextNode(members[i].state);
                         cell3.appendChild(cellText3);
 
                         let cell4 = row.insertCell();
-                        let cellText4 = document.createTextNode(x[i].seniority);
+                        let cellText4 = document.createTextNode(members[i].seniority);
                         cell4.appendChild(cellText4);
 
                         let cell5 = row.insertCell();
-                        let cellText5 = document.createTextNode(x[i].votes_with_party_pct + "%");
+                        let cellText5 = document.createTextNode(members[i].votes_with_party_pct + "%");
                         cell5.appendChild(cellText5);
 
                         row.appendChild(cell1);
@@ -790,3 +791,5 @@ switch (true) {
 //         }
 //     }
 // }
+
+   
